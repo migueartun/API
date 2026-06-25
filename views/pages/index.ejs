@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head'); %>
+</head>
+<body class="container">
+
+    <header>
+        <%- include('../partials/header'); %>
+    </header>
+
+    <main>
+        <div class="jumbotron">
+            <h1>Top Mascots</h1>
+            <p><%= frases %></p>
+            <ul>
+                <% mascoticas.forEach(function(m) { %>
+                    <li>
+                        <strong><%= m.name %></strong>
+                        representing <%= m.organization %>, born <%= m.birth_year %>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <%- include('../partials/footer'); %>
+    </footer>
+
+</body>
+</html>

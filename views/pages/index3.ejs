@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head'); %>
+</head>
+<body class="container">
+
+
+    <header>
+        <%- include('../partials/header'); %>
+    </header>
+
+    <main>
+        
+        <div class="jumbotron">
+            <h1>clientes</h1>
+            <table id="example" class="table table-striped">
+                <thead >
+                    <th scope="col">Nombre</th>
+                    <th scope="col">email</th>
+                    <th scope="col">telefono</th>
+                    
+                </thead>
+                <tbody>
+                    <% clientes.forEach(function(c) { %>
+                    <tr>
+                        <td><%= c.nombre %></td>
+                        <td><%= c.email %></td>
+                        <td><%= c.telefono %></td>
+                        
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    
+    <footer>
+        <%- include('../partials/footer'); %>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.3.8/js/dataTables.bootstrap5.js"></script>
+    <script>
+        new DataTable('#example');
+    </script>
+</body>
