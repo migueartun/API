@@ -5,6 +5,7 @@ app.set('view engine', 'ejs')
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
+app.get('/', (req,res) => res.redirect('/clientes'))
 app.use('/clientes', require('./router/enrrutamiento.router'))
 app.use('/servicios', require('./router/servicio.router'))
 
