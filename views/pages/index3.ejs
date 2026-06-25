@@ -5,21 +5,21 @@
 </head>
 <body class="container">
 
-
     <header>
         <%- include('../partials/header'); %>
     </header>
 
     <main>
-        
-        <div class="jumbotron">
-            <h1>clientes</h1>
-            <table id="example" class="table table-striped">
-                <thead >
-                    <th scope="col">Nombre</th>
-                    <th scope="col">email</th>
-                    <th scope="col">telefono</th>
-                    
+        <div class="jumbotron mt-4">
+            <h1>Clientes</h1>
+            <table id="example" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Teléfono</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <% clientes.forEach(function(c) { %>
@@ -27,7 +27,11 @@
                         <td><%= c.nombre %></td>
                         <td><%= c.email %></td>
                         <td><%= c.telefono %></td>
-                        
+                        <td>
+                            <button class="btn btn-sm btn-info btn-detalle" data-nombre="<%= c.nombre %>" data-email="<%= c.email %>" data-telefono="<%= c.telefono %>" data-bs-toggle="modal" data-bs-target="#modalDetalle">Ver detalles</button>
+                            <button class="btn btn-sm btn-warning btn-editar" data-nombre="<%= c.nombre %>" data-email="<%= c.email %>" data-telefono="<%= c.telefono %>" data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
+                            <button class="btn btn-sm btn-danger btn-eliminar" data-email="<%= c.email %>" data-bs-toggle="modal" data-bs-target="#modalEliminar">Eliminar</button>
+                        </td>
                     </tr>
                     <% }); %>
                 </tbody>
@@ -35,15 +39,116 @@
         </div>
     </main>
 
-    
+    <!-- Modal Detalle -->
+    <div class="modal fade" id="modalDetalle" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalles del Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Nombre:</strong> <span id="detalle-nombre"></span></p>
+                    <p><strong>Email:</strong> <span id="detalle-email"></span></p>
+                    <p><strong>Teléfono:</strong> <span id="detalle-telefono"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar -->
+    <div class="modal fade" id="modalEditar" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formEditar" method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" name="emailOriginal" id="edit-email-original">
+                        <div class="mb-3">
+                            <label for="edit-nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="edit-nombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="edit-email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-telefono" class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" id="edit-telefono" name="telefono">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Eliminar -->
+    <div class="modal fade" id="modalEliminar" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Eliminar Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de eliminar a <strong id="eliminar-nombre"></strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <form id="formEliminar" method="POST">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <%- include('../partials/footer'); %>
     </footer>
+
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.3.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.3.8/js/dataTables.bootstrap5.js"></script>
     <script>
-        new DataTable('#example');
+        $(document).ready(function() {
+            new DataTable('#example');
+
+            // Modal Detalle
+            $('.btn-detalle').click(function() {
+                $('#detalle-nombre').text($(this).data('nombre'));
+                $('#detalle-email').text($(this).data('email'));
+                $('#detalle-telefono').text($(this).data('telefono'));
+            });
+
+            // Modal Editar
+            $('.btn-editar').click(function() {
+                var email = $(this).data('email');
+                $('#edit-email-original').val(email);
+                $('#edit-nombre').val($(this).data('nombre'));
+                $('#edit-email').val(email);
+                $('#edit-telefono').val($(this).data('telefono'));
+                $('#formEditar').attr('action', '/clientes/' + encodeURIComponent(email) + '?_method=PUT');
+            });
+
+            // Modal Eliminar
+            $('.btn-eliminar').click(function() {
+                var email = $(this).data('email');
+                $('#eliminar-nombre').text($(this).closest('tr').find('td:first').text());
+                $('#formEliminar').attr('action', '/clientes/' + encodeURIComponent(email) + '?_method=DELETE');
+            });
+        });
     </script>
 </body>
+</html>
