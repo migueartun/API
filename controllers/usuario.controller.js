@@ -1,4 +1,5 @@
 const modeloUsuario = require('../models/usuario.model');
+const { sendEmail } = require('../services/email.service');
 
 exports.listarPagina = async (req,res) => {
     try {
@@ -34,6 +35,7 @@ exports.registrar = async (req,res) => {
             password: req.body.password,
             rol: req.body.rol
         });
+        await sendEmail(req.body.email, 'Bienvenido', 'Usuario registrado correctamente');
         res.json(usuario);
     } catch (error) {
         res.status(500).json({error: error.message});
