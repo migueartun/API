@@ -113,6 +113,26 @@
         </div>
     </div>
 
+    <section class="mt-5 p-4 bg-light rounded">
+        <h3>Envíanos un mensaje</h3>
+        <form id="formContacto">
+            <div class="mb-3">
+                <label for="contacto-asunto" class="form-label">Asunto</label>
+                <input type="text" class="form-control" id="contacto-asunto" required>
+            </div>
+            <div class="mb-3">
+                <label for="contacto-email" class="form-label">Correo</label>
+                <input type="email" class="form-control" id="contacto-email" required>
+            </div>
+            <div class="mb-3">
+                <label for="contacto-mensaje" class="form-label">Comentario</label>
+                <textarea class="form-control" id="contacto-mensaje" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <span id="contacto-respuesta" class="ms-3"></span>
+        </form>
+    </section>
+
     <footer>
         <%- include('../partials/footer'); %>
     </footer>
@@ -140,6 +160,25 @@
                 $('#edit-email').val(email);
                 $('#edit-telefono').val($(this).data('telefono'));
                 $('#formEditar').attr('action', '/clientes/' + encodeURIComponent(email) + '?_method=PUT');
+            });
+
+            // Formulario contacto
+            $('#formContacto').submit(function(e) {
+                e.preventDefault();
+                var btn = $(this).find('button[type=submit]');
+                btn.prop('disabled', true).text('Enviando...');
+                $.post('/usuarios/enviar-correo', {
+                    email: $('#contacto-email').val(),
+                    asunto: $('#contacto-asunto').val(),
+                    mensaje: $('#contacto-mensaje').val()
+                }).done(function() {
+                    $('#contacto-respuesta').text('Correo enviado').css('color', 'green');
+                    $('#formContacto')[0].reset();
+                }).fail(function() {
+                    $('#contacto-respuesta').text('Error al enviar').css('color', 'red');
+                }).always(function() {
+                    btn.prop('disabled', false).text('Enviar');
+                });
             });
 
             // Modal Eliminar
