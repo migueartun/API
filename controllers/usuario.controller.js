@@ -27,7 +27,6 @@ exports.buscarId = async (req,res) => {
         res.status(500).json({error: error.message});
     }
 };
-
 exports.registrar = async (req,res) => {
     try {
         const usuario = await modeloUsuario.create({
