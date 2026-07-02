@@ -115,21 +115,23 @@
 
     <section class="mt-5 p-4 bg-light rounded">
         <h3>Envíanos un mensaje</h3>
-        <form id="formContacto">
+        <% if (mensaje) { %>
+            <div class="alert alert-success"><%= mensaje %></div>
+        <% } %>
+        <form action="/enviar" method="POST">
             <div class="mb-3">
                 <label for="contacto-asunto" class="form-label">Asunto</label>
-                <input type="text" class="form-control" id="contacto-asunto" required>
+                <input type="text" class="form-control" name="asunto" required>
             </div>
             <div class="mb-3">
                 <label for="contacto-email" class="form-label">Correo</label>
-                <input type="email" class="form-control" id="contacto-email" required>
+                <input type="email" class="form-control" name="correo" required>
             </div>
             <div class="mb-3">
                 <label for="contacto-mensaje" class="form-label">Comentario</label>
-                <textarea class="form-control" id="contacto-mensaje" rows="3" required></textarea>
+                <textarea class="form-control" name="mensaje" rows="3" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Enviar</button>
-            <span id="contacto-respuesta" class="ms-3"></span>
         </form>
     </section>
 
@@ -137,57 +139,6 @@
         <%- include('../partials/footer'); %>
     </footer>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/2.3.8/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.3.8/js/dataTables.bootstrap5.js"></script>
-    <script>
-        $(document).ready(function() {
-            new DataTable('#example');
 
-            // Modal Detalle
-            $('.btn-detalle').click(function() {
-                $('#detalle-nombre').text($(this).data('nombre'));
-                $('#detalle-email').text($(this).data('email'));
-                $('#detalle-telefono').text($(this).data('telefono'));
-            });
-
-            // Modal Editar
-            $('.btn-editar').click(function() {
-                var email = $(this).data('email');
-                $('#edit-email-original').val(email);
-                $('#edit-nombre').val($(this).data('nombre'));
-                $('#edit-email').val(email);
-                $('#edit-telefono').val($(this).data('telefono'));
-                $('#formEditar').attr('action', '/clientes/' + encodeURIComponent(email) + '?_method=PUT');
-            });
-
-            // Formulario contacto
-            $('#formContacto').submit(function(e) {
-                e.preventDefault();
-                var btn = $(this).find('button[type=submit]');
-                btn.prop('disabled', true).text('Enviando...');
-                $.post('/usuarios/enviar-correo', {
-                    email: $('#contacto-email').val(),
-                    asunto: $('#contacto-asunto').val(),
-                    mensaje: $('#contacto-mensaje').val()
-                }).done(function() {
-                    $('#contacto-respuesta').text('Correo enviado').css('color', 'green');
-                    $('#formContacto')[0].reset();
-                }).fail(function() {
-                    $('#contacto-respuesta').text('Error al enviar').css('color', 'red');
-                }).always(function() {
-                    btn.prop('disabled', false).text('Enviar');
-                });
-            });
-
-            // Modal Eliminar
-            $('.btn-eliminar').click(function() {
-                var email = $(this).data('email');
-                $('#eliminar-nombre').text($(this).closest('tr').find('td:first').text());
-                $('#formEliminar').attr('action', '/clientes/' + encodeURIComponent(email) + '?_method=DELETE');
-            });
-        });
-    </script>
 </body>
 </html>

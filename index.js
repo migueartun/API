@@ -8,13 +8,18 @@ app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use(methodOverride('_method'))
 
-const servicioEmail = require('./services/email.service')
-app.get('/enviar', async (req,res)=>{
+const { sendEmail } = require('./services/email.service')
+
+app.post('/enviar', async (req,res)=>{
   try {
-    await servicioEmail.sendEmail('migueartun@gmail.com', 'Prueba de correo', 'Este es un correo de prueba ()')
-    res.send('Correo enviado correctamente')
+    await sendEmail(
+      req.body.correo || process.env.MAIL,
+      req.body.asunto || 'Sin asunto',
+      req.body.mensaje || 'Sin mensaje'
+    );
+    res.redirect('/clientes?mensaje=Correo enviado correctamente');
   } catch (error) {
-    res.status(500).send('Error al enviar el correo')
+    res.redirect('/clientes?mensaje=Error al enviar el correo');
   }
 })
 

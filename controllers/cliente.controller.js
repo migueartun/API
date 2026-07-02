@@ -8,7 +8,7 @@ exports.home = async (req,res)=>{
 exports.listar = async (req,res)=>{
   try {
     const clientes = await modeloCliente.find();
-    res.render('pages/index3', { clientes });
+    res.render('pages/index3', { clientes, mensaje: req.query.mensaje || '' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
