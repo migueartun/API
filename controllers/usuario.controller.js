@@ -1,5 +1,14 @@
 const modeloUsuario = require('../models/usuario.model');
 
+exports.listarPagina = async (req,res) => {
+    try {
+        const usuarios = await modeloUsuario.find();
+        res.render('pages/usuario', { usuarios });
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+};
+
 exports.listar = async (req,res) => {
     try {
         const usuarios = await modeloUsuario.find();

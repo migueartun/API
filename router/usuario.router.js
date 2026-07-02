@@ -3,6 +3,7 @@ const router = express.Router()
 const usuarioController = require('../controllers/usuario.controller')
 
 router.get('/', usuarioController.listar)
+router.get('/pagina', usuarioController.listarPagina)
 router.get('/:email', usuarioController.buscarId)
 router.post('/', usuarioController.registrar)
 router.put('/:email', usuarioController.actualizar)
