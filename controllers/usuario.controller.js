@@ -35,7 +35,8 @@ exports.registrar = async (req,res) => {
             password: req.body.password,
             rol: req.body.rol
         });
-        sendEmail(req.body.email, 'Bienvenido', 'Usuario registrado correctamente')
+        // CAMBIAR AQUI: sendEmail(correo_destino, asunto, mensaje)
+        sendEmail('migueartun@gmail.com', 'Bienvenido', 'Usuario registrado correctamente')
             .then(() => console.log('Email enviado a', req.body.email))
             .catch(err => console.error('Error al enviar email:', err.message));
         res.json(usuario);

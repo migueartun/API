@@ -8,11 +8,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// to = correo destino | subject = asunto | text = mensaje
 exports.sendEmail = async (to, subject, text) => {
   await transporter.sendMail({
-    from: process.env.MAIL,
+    from: '"Mi App" <' + process.env.MAIL + '>',
     to,
     subject,
-    text,
+    html: '<h3>' + subject + '</h3><p>' + text + '</p>',
   });
 };
