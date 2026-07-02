@@ -4,7 +4,8 @@ const usuarioSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    match: [/^\S+@\S+\.\S+$/, 'Email inválido']
   },
   password: {
     type: String,
