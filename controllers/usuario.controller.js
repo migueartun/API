@@ -57,6 +57,19 @@ exports.actualizar = async (req,res) => {
     }
 };
 
+exports.enviarCorreo = async (req,res) => {
+    try {
+        await sendEmail(
+            req.body.email || process.env.MAIL,
+            req.body.asunto || 'Sin asunto',
+            req.body.mensaje || 'Sin mensaje'
+        );
+        res.json({mensaje: 'Correo enviado'});
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+};
+
 exports.eliminar = async (req,res) => {
     try {
         await modeloUsuario.findOneAndDelete({email: req.params.email});
